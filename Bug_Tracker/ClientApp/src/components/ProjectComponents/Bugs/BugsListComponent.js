@@ -4,7 +4,7 @@ import { Checkbox, Table, Button } from 'semantic-ui-react';
 import axios from 'axios';
 
 
-export class BugsDashboardComponent extends Component {
+export class BugsListComponent extends Component {
     constructor() {
         super()
         this.state = { bugsList: [], loading: false }
@@ -14,10 +14,11 @@ export class BugsDashboardComponent extends Component {
         this.populateBugs()
     }
 
-    static renderBugsTable(bugsList) {
+    static renderBugsTable(bugsList, clickFunction) {
         return (
             <div>
-                <Button basic color='blue' as={Link} to="/test/project/bugs/create"> Submit Bug </Button>
+                <Button basic color='blue' id='3' onClick={clickFunction}> Submit Bug </Button>
+                <Button basic color='blue' id='4' onClick={clickFunction}> Bug Details Test </Button>
                 <Table compact definition>
                     <Table.Header>
                         <Table.Row>
@@ -57,7 +58,7 @@ export class BugsDashboardComponent extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : BugsDashboardComponent.renderBugsTable(this.state.bugsList);
+            : BugsListComponent.renderBugsTable(this.state.bugsList, this.props.onClick);
 
         return (
             <div>

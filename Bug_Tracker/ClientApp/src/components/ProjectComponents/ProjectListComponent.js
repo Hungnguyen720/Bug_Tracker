@@ -1,5 +1,4 @@
-﻿
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import { Checkbox, Table } from 'semantic-ui-react';
 import axios from 'axios';
 

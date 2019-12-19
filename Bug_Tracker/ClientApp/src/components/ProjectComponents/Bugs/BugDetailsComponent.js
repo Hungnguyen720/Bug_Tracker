@@ -231,6 +231,7 @@ export class BugDetailsComponent extends Component {
                     </Grid.Row>
                 </Grid>
                 <button onClick={this.onSubmit}>Save</button>
+                <button >Cancel</button>
             </div>
         );
     }

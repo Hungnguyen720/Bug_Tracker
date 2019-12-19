@@ -1,11 +1,9 @@
 ﻿
 import React, { Component } from 'react';
-import { Form, Dropdown, Button } from 'semantic-ui-react';
+import { Form, Dropdown, Button, TextArea } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Editor } from '../../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg';
 import DatePicker from '../../../../node_modules/react-datepicker';
-import "../../../../node_modules/react-datepicker/dist/react-datepicker.css";
 
 const flagOptions = [
     {
@@ -147,7 +145,6 @@ export class BugsCreateComponent extends Component {
 
 
     render() {
-        const { editorState } = this.state;
 
         return (
             <div>
@@ -175,12 +172,11 @@ export class BugsCreateComponent extends Component {
                         name="dueDate"
                         placeholderText="Due Date"
                     />
-                    <Editor
-                        editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        onEditorStateChange={this.onEditorStateChange}
+                    <TextArea
+                        placeholder='Description'
+                        onChange={this.onEditorStateChange}
                     />
+
                     <Dropdown
                         placeholder="Flag"
                         name="Flag"

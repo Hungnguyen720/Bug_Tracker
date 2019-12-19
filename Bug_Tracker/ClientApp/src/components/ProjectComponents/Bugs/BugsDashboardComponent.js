@@ -1,18 +1,33 @@
 ﻿import React, { Component } from 'react'
+import { SideNav } from '../SideNav'
+import { BugsCreateComponent } from '../Bugs/BugsCreateComponent'
+import { BugsListComponent } from '../Bugs/BugsListComponent'
+import { BugsHomeComponent } from '../Bugs/BugsHomeComponent'
+
+
 
 export class BugsDashboardComponent extends Component {
     constructor() {
         super()
         this.state = {
-            displayContent: 2
+            displayContent: ''
         }
+
+        this.updateDisplayContentState = this.updateDisplayContentState.bind(this);
     }
+
+
+    updateDisplayContentState(e) {
+        this.setState({
+            displayContent:e.target.id
+        })
+    }
+
     render() {
 
         let contents = this.displayContent(this.state.displayContent)
 
             return (
-                
                 <div>
                     { contents }
                 </div>
@@ -35,17 +50,17 @@ export class BugsDashboardComponent extends Component {
             }
 
         }
-
+    
     contentOne() {
-        return (<h1>One</h1>)
+        return (<BugsHomeComponent />)
     }
 
     contentTwo() {
-        return (<h1>Two</h1>)
+        return (<BugsListComponent onClick={this.updateDisplayContentState} />)
     }
 
     contentThree() {
-        return (<h1>Three</h1>)
+        return (<BugsCreateComponent />)
     }
 
     }

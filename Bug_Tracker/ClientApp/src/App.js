@@ -7,11 +7,10 @@ import { Counter } from './components/Counter';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
-import { ProjectDashboardComponent } from './components/ProjectComponents/Dashboard/ProjectDashboardComponent';
-import { BugsDashboardComponent } from './components/ProjectComponents/Bugs/BugsDashboardComponent';
 import { ProjectListComponent } from './components/ProjectComponents/ProjectListComponent';
-import { ProjectCreateComponent } from './components/ProjectComponents/ProjectCreateComponent';
-import { ProjectUsersComponent } from './components/ProjectComponents//ProjectUsersComponent';
+import { ProjectDashboard } from './components/ProjectComponents/ProjectDashboard';
+
+
 
 
 
@@ -27,12 +26,9 @@ export default class App extends Component {
         <Route exact path='/' component={Home} />
         <Route path='/counter' component={Counter} />
         <AuthorizeRoute path='/fetch-data' component={FetchData} />
-        <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-            <AuthorizeRoute exact path='/:username/project/dashboard' component={ProjectDashboardComponent} />
-            <AuthorizeRoute exact path='/:username/project/bugs' component={BugsDashboardComponent} />
-            <AuthorizeRoute exact path='/:username/project/list' component={ProjectListComponent} />
-            <AuthorizeRoute exact path='/:username/project/create' component={ProjectCreateComponent} />
-            <AuthorizeRoute exact path='/:username/project/users' component={ProjectUsersComponent} />
+            <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
+            <AuthorizeRoute exact path='/:username/projects' component={ProjectListComponent} />
+            <AuthorizeRoute exact path='/:username/projects/:projectid' component={ProjectDashboard} />
         </Layout>
     );
   }

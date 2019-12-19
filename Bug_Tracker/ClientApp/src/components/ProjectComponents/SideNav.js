@@ -14,6 +14,7 @@ import {
 
 export class SideNav extends Component {
 
+
     render() {
         return(
             <Sidebar
@@ -25,18 +26,21 @@ export class SideNav extends Component {
                 visible
                 width='thin'
             >
-                <Menu.Item href='https://localhost:44395/test/project/bugs'>
-                    <Icon name='home' />
+                <Menu.Item onClick={this.props.onClick} id='1' >
+                    <Icon name='home' id='1' />
                     Dashboard
                 </Menu.Item>
-                <Menu.Item href='https://localhost:44395/test/project/bugs/create'>
-                    <Icon name='gamepad' />
+                <Menu.Item onClick={this.props.onClick} id='2'>
+                    <Icon name='gamepad' id='2' />
                     Bugs
                 </Menu.Item>
-                <Menu.Item as='a'>
-                    <Icon name='camera' />
-                    Settings
+                <Menu.Item onClick={this.props.onClick} id='5'>
+                    Tasks
                 </Menu.Item>
+                <Menu.Item onClick={this.props.onClick} id='6'>
+                    Calendar
+                </Menu.Item>
+
             </Sidebar>
         )
     }
