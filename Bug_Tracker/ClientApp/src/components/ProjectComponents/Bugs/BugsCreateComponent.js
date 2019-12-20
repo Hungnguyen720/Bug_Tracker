@@ -4,6 +4,7 @@ import { Form, Dropdown, Button, TextArea } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from '../../../../node_modules/react-datepicker';
+import moment from 'moment';
 
 const flagOptions = [
     {
@@ -85,7 +86,8 @@ export class BugsCreateComponent extends Component {
             IssueType: '',
             Followers: [],
             Flag: '',
-            Severity: ''
+            Severity: '',
+            Description: ''
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -97,12 +99,15 @@ export class BugsCreateComponent extends Component {
     }
 
     handleFormSubmit = () => {
-        const { Title, DueDate, AssignedTo, IssueType, Followers, Flag, Severity } = this.state
+        const { Title, DueDate, Description, AssignedTo, IssueType, Followers, Flag, Severity } = this.state
+
+        let newDueDate = moment(DueDate).format()
 
         axios.post('api/bugs', {
             Title,
+            Description,
             AssignedTo,
-            DueDate,
+            newDueDate,
             Severity,
             Flag,
             IssueType,
@@ -112,7 +117,7 @@ export class BugsCreateComponent extends Component {
         }).catch(function (response) {
             console.log(response)
         })
-
+        
     }
 
     handleChange(event) {
@@ -174,7 +179,8 @@ export class BugsCreateComponent extends Component {
                     />
                     <TextArea
                         placeholder='Description'
-                        onChange={this.onEditorStateChange}
+                        name='Description'
+                        onChange={this.handleChange}
                     />
 
                     <Dropdown
