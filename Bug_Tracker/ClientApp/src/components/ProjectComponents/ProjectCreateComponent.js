@@ -5,6 +5,8 @@ import { Editor } from '../../../node_modules/react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import DatePicker from '../../../node_modules/react-datepicker';
 import "../../../node_modules/react-datepicker/dist/react-datepicker.css";
+import moment from 'moment';
+import authService from '../api-authorization/AuthorizeService';
 
 
 export class ProjectCreateComponent extends Component {
@@ -52,6 +54,18 @@ export class ProjectCreateComponent extends Component {
         });
     };
 
+    componentDidMount() {
+        this.getLoggedInUser()
+    }
+
+    async getLoggedInUser() {
+        const user = await Promise.resolve(authService.getUser())
+        this.setState({
+            Owner: user.name
+        })
+    }
+
+
     handleFormSubmit() {
         const { ProjectName, Owner, DateStart, DateEnd } = this.state
 
@@ -60,8 +74,7 @@ export class ProjectCreateComponent extends Component {
         }).then(function (response) {
 
             let projectId = response.data.id;
-
-            axios.post('api/projectsettings', {
+            axios.post('api/ProjectSettingsModels', {
                 "ProjectId": projectId,
                 ProjectName,
                 Owner,

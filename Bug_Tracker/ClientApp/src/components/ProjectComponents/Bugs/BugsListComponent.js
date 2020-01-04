@@ -1,20 +1,49 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Checkbox, Table, Button } from 'semantic-ui-react';
-import axios from 'axios';
+import { BugDetailsComponent } from './BugDetailsComponent';
+import authService from '../../api-authorization/AuthorizeService';
 
 
 export class BugsListComponent extends Component {
     constructor() {
         super()
-        this.state = { bugsList: [], loading: false }
+        this.state = {
+            bugsList: [],
+            loading: false,
+            displayBugDetail: false,
+            bugId: ''
+
+        }
+
+        this.displayBugDetail = this.displayBugDetail.bind(this)
+        this.displayBugList = this.displayBugList.bind(this)
     }
 
-    componentDidMount() {
-        this.populateBugs()
+
+    displayBugDetail(e) {
+        this.setState({
+            displayBugDetail: true,
+            bugId: e.target.getAttribute('bugid')
+        })
     }
 
-    static renderBugsTable(bugsList, clickFunction) {
+    displayBugList() {
+        this.setState({
+            displayBugDetail: false,
+            bugId: ''
+        })
+    }
+
+
+
+    async componentDidMount() {
+        let user = await Promise.resolve(this.getLoggedInUser())
+
+        this.populateBugs(this.props.projectid, user)
+    }
+
+    static renderBugsTable(bugsList, clickFunction, updateDisplayBugDetail) {
         return (
             <div>
                 <Button basic color='blue' id='3' onClick={clickFunction}> Submit Bug </Button>
@@ -33,12 +62,12 @@ export class BugsListComponent extends Component {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {bugsList.map(bug => 
+                        {bugsList.map(bug =>
                             <Table.Row>
                                 <Table.Cell collapsing>
                                     <Checkbox slider />
                                 </Table.Cell>
-                                <Table.Cell>{bug.title} {bug.id}</Table.Cell>
+                                <Table.Cell><button id={4} bugid={bug.id} onClick={updateDisplayBugDetail}> {bug.title} </button></Table.Cell>
                                 <Table.Cell>{bug.reporter}</Table.Cell>
                                 <Table.Cell>{bug.dateCreated}</Table.Cell>
                                 <Table.Cell>{bug.status}</Table.Cell>
@@ -56,9 +85,17 @@ export class BugsListComponent extends Component {
 
 
     render() {
-        let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
-            : BugsListComponent.renderBugsTable(this.state.bugsList, this.props.onClick);
+        let contents = ''
+
+        if (this.state.displayBugDetail == false) {
+            contents = BugsListComponent.renderBugsTable(this.state.bugsList, this.props.onClick, this.displayBugDetail);
+        }
+
+        if (this.state.displayBugDetail == true) {
+            contents = <BugDetailsComponent onClick={this.displayBugList} bugid={this.state.bugId} />
+        }
+
+
 
         return (
             <div>
@@ -68,10 +105,16 @@ export class BugsListComponent extends Component {
     }
 
 
-    async populateBugs() {
-        const response = await fetch('api/bugs')
+    async populateBugs(projectId, user) {
+        const response = await fetch('api/bugs?projectid=' + projectId + '&user=' + user)
         const data = await response.json()
-        console.log(data)
-        this.setState({ bugsList: data })
+        this.setState({
+            bugsList: data,
+        })
+    }
+
+    async getLoggedInUser() {
+        const user = await Promise.resolve(authService.getUser())
+        return user.name
     }
 }

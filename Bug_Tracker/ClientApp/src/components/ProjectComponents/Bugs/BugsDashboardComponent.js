@@ -3,6 +3,7 @@ import { SideNav } from '../SideNav'
 import { BugsCreateComponent } from '../Bugs/BugsCreateComponent'
 import { BugsListComponent } from '../Bugs/BugsListComponent'
 import { BugsHomeComponent } from '../Bugs/BugsHomeComponent'
+import { BugDetailsComponent } from '../Bugs/BugDetailsComponent'
 
 
 
@@ -10,7 +11,8 @@ export class BugsDashboardComponent extends Component {
     constructor() {
         super()
         this.state = {
-            displayContent: ''
+            displayContent: '',
+            bugId: ''
         }
 
         this.updateDisplayContentState = this.updateDisplayContentState.bind(this);
@@ -19,8 +21,12 @@ export class BugsDashboardComponent extends Component {
 
     updateDisplayContentState(e) {
         this.setState({
-            displayContent:e.target.id
+            displayContent: e.target.id,
         })
+    }
+
+    componentDidMount() {
+        console.log('bug dashboard')
     }
 
     render() {

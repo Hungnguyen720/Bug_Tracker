@@ -7,16 +7,28 @@ import { BugsCreateComponent } from './Bugs/BugsCreateComponent';
 import { BugDetailsComponent } from './Bugs/BugDetailsComponent';
 import { ProjectHome } from './ProjectHome';
 import { CalendarComponent } from './CalendarComponent';
-import { ProjectTasksComponent } from './ProjectTasksComponent';
+import { TasksListComponent } from './Tasks/TasksListComponent';
+import { TaskCreateComponent } from './Tasks/TaskCreateComponent';
 
 export class ProjectDashboard extends Component {
     constructor() {
         super()
         this.state = {
-            displayContent: ''
+            displayContent: 0,
+            projectID : ''
         }
 
         this.updateDisplayContentState = this.updateDisplayContentState.bind(this);
+    }
+
+    componentDidMount() {
+        let projectId = window.location.href
+        projectId = projectId[projectId.length - 1]
+
+        this.setState({
+            projectID: projectId,
+            displayContent: 1
+        })
     }
 
     updateDisplayContentState(e) {
@@ -42,28 +54,33 @@ export class ProjectDashboard extends Component {
     displayContent(state) {
 
         if (state == 1) {
-            return (< ProjectHome />)
+            return (< ProjectHome projectid={this.state.projectID} />)
         }
 
         if (state == 2) {
-            return (<BugsListComponent onClick={this.updateDisplayContentState} />)
+            return (<BugsListComponent onClick={this.updateDisplayContentState} projectid={this.state.projectID} />)
         }
 
         if (state == 3) {
-            return (< BugsCreateComponent />)
+            return (< BugsCreateComponent projectid={this.state.projectID} />)
         }
 
-        if (state == 4) {
-            return (< BugDetailsComponent />)
-        } 
 
         if (state == 5) {
             return (
-                < ProjectTasksComponent />    
+                < TasksListComponent projectid={this.state.projectID} onClick={this.updateDisplayContentState} />    
             )
         }
 
         if (state == 6) {
+            return (
+                < TaskCreateComponent projectid={this.state.projectID} />
+            )
+        }
+        
+        
+
+        if (state == 10) {
             return (
                 < CalendarComponent />
             )

@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import { Grid, Dropdown } from 'semantic-ui-react';
+import { Grid, Dropdown, Button } from 'semantic-ui-react';
 
 import DatePicker from '../../../../node_modules/react-datepicker';
 import "../../../../node_modules/react-datepicker/dist/react-datepicker.css";
@@ -68,7 +68,7 @@ export class BugDetailsComponent extends Component {
             flag: '',
             id: '',
             projectID: '',
-            reporter: 'hung',
+            reporter: '',
             reproducible: '',
             severity: '',
             status: '',
@@ -82,8 +82,8 @@ export class BugDetailsComponent extends Component {
     }
 
     componentDidMount() {
-
-        this.populateBugs()
+        
+        this.populateBugs( this.props.bugid )
 
     }
 
@@ -107,7 +107,7 @@ export class BugDetailsComponent extends Component {
         dueDate = this.toLocalTime(dueDate)
 
 
-        axios.put('api/bugs/' + id, {
+        axios.put('api/bugs/' + projectID, {
             id,
             assignedTo,
             comment,
@@ -133,6 +133,7 @@ export class BugDetailsComponent extends Component {
     render() {
         return (
             <div>
+                <h1>bug details</h1>
                 <Grid columns={4} >
                     <Grid.Row>
                         <Grid.Column>
@@ -140,8 +141,9 @@ export class BugDetailsComponent extends Component {
                         </Grid.Column>
                         <Grid.Column>
                             <Dropdown
-                                name="assignedTo"
-                                defaultValue={this.state.assignedTo}
+                                placeholder={this.state.assignedTo}
+                                name={this.state.assignedTo}
+                                defaultvalue={this.state.assignedTo}
                                 onChange={this.handleDropdownChange}
                                 options={assignedToOptions}
                             />
@@ -150,14 +152,12 @@ export class BugDetailsComponent extends Component {
                             <h5>Due on</h5>
                         </Grid.Column>
                         <Grid.Column>
-
                             <DatePicker
                                 selected={this.state.dueDate}
                                 onChange={this.handleDueDateChange}
                                 name="dueDate"
                                 placeholderText="Due Date"
                             />
-
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
@@ -166,9 +166,9 @@ export class BugDetailsComponent extends Component {
                         </Grid.Column>
                         <Grid.Column>
                             <Dropdown
-                                placeholder='Status'
+                                placeholder={this.state.status}
                                 name="status"
-                                defaultValue={this.state.status}
+                                defaultvalue={this.state.status}
                                 onChange={this.handleDropdownChange}
                                 options={statusOptions}
                             />
@@ -179,9 +179,9 @@ export class BugDetailsComponent extends Component {
                         </Grid.Column>
                         <Grid.Column>
                             <Dropdown
-                                placeholder='Severity'
+                                placeholder={this.state.severity}
                                 name="severity"
-                                value={this.state.severity}
+                                defaultvalue={this.state.severity}
                                 onChange={this.handleDropdownChange}
                                 options={severityOptions}
                             />
@@ -193,9 +193,9 @@ export class BugDetailsComponent extends Component {
                         </Grid.Column>
                         <Grid.Column>
                             <Dropdown
-                                placeholder='Dropdown'
+                                placeholder={this.state.reproducible}
                                 name="reproducible"
-                                value={this.state.reproducible}
+                                defaultvalue={this.state.reproducible}
                                 onChange={this.handleDropdownChange}
                                 options={reproducibleOptions}
                             />
@@ -206,9 +206,9 @@ export class BugDetailsComponent extends Component {
                         </Grid.Column>
                         <Grid.Column>
                             <Dropdown
-                                placeholder='Classification'
+                                placeholder={this.state.classification}
                                 name="classification"
-                                value={this.state.classification}
+                                defaultValue={this.state.classification}
                                 onChange={this.handleDropdownChange}
                                 options={classificationFlag}
                             />
@@ -226,19 +226,20 @@ export class BugDetailsComponent extends Component {
                             <Dropdown
                                 placeholder='Flag'
                                 options={flagOptions}
+                                defaultvalue={this.state.flag}
                             />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-                <button onClick={this.onSubmit}>Save</button>
-                <button >Cancel</button>
+                <Button onClick={this.onSubmit} >Save</Button>
+                <Button onClick={this.props.onClick}>Cancel</Button>
             </div>
         );
     }
 
 
-    async populateBugs() {
-        const response = await fetch('api/bugs/1')
+    async populateBugs(id) {
+        const response = await fetch('api/bugs/' + id)
         const data = await response.json()
 
         //convert due date to UTC

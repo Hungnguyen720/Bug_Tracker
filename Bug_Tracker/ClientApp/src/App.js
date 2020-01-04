@@ -9,7 +9,7 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import { ProjectListComponent } from './components/ProjectComponents/ProjectListComponent';
 import { ProjectDashboard } from './components/ProjectComponents/ProjectDashboard';
-
+import { BugDetailsComponent } from './components/ProjectComponents/Bugs/BugDetailsComponent';
 
 
 

@@ -2,19 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Bug_Tracker.Data;
 using Bug_Tracker.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bug_Tracker.Controllers
 {
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class BugsController : ControllerBase
     {
         private readonly BugContext _context;
+        protected ApplicationDbContext ApplicationDbContext { get; set; }
+        protected UserManager<ApplicationUser> UserManager { get; set; }
 
         public BugsController(BugContext context)
         {
@@ -22,16 +27,20 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: api/Bugs
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bugs>>> GetProject_Bugs()
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<Bugs>>> GetProject_Bugs(int projectid, string user)
         {
-            return await _context.Project_Bugs.ToListAsync();
+
+            return await _context.Project_Bugs.Where(pid => pid.ProjectID == projectid).Where(u => u.Reporter == user).ToListAsync();
+
         }
 
         // GET: api/Bugs/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Bugs>> GetBugs(int id)
         {
+
             var bugs = await _context.Project_Bugs.FindAsync(id);
 
             if (bugs == null)

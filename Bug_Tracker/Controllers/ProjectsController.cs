@@ -23,8 +23,9 @@ namespace Bug_Tracker.Controllers
 
         // GET: api/Projects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Projects>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<Projects>>> GetProjects(string user)
         {
+
             return await _context.Projects.ToListAsync();
         }
 
@@ -80,6 +81,10 @@ namespace Bug_Tracker.Controllers
         [HttpPost]
         public async Task<ActionResult<Projects>> PostProjects(Projects projects)
         {
+            int maxId = _context.Projects.Max(b => b.Id);
+
+            projects.Id = maxId + 1;
+
             _context.Projects.Add(projects);
             await _context.SaveChangesAsync();
 

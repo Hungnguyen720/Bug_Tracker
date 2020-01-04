@@ -23,9 +23,10 @@ namespace Bug_Tracker.Controllers
 
         // GET: api/ProjectSettingsModels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProjectSettingsModel>>> GetProjectSettings()
+        public async Task<ActionResult<List<ProjectSettingsModel>>> GetProjectSettings(string user)
         {
-            return await _context.ProjectSettings.ToListAsync();
+            return await _context.ProjectSettings.FromSqlRaw($"Select ProjectSettings.Id, ProjectSettings.ProjectId, ProjectName, Owner, DateStart, DateEnd, ProjectOverview From ProjectSettings INNER JOIN Project_Members ON ProjectSettings.ProjectId = Project_Members.ProjectId WHERE ProjectMember = '{user}'").ToListAsync();
+            //    return await _context.ProjectSettings.ToListAsync();
         }
 
         // GET: api/ProjectSettingsModels/5
@@ -80,6 +81,10 @@ namespace Bug_Tracker.Controllers
         [HttpPost]
         public async Task<ActionResult<ProjectSettingsModel>> PostProjectSettingsModel(ProjectSettingsModel projectSettingsModel)
         {
+            int maxId = _context.ProjectSettings.Max(b => b.Id);
+
+            projectSettingsModel.Id = maxId + 1;
+
             _context.ProjectSettings.Add(projectSettingsModel);
             await _context.SaveChangesAsync();
 

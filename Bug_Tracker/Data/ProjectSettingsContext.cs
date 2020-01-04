@@ -15,5 +15,6 @@ namespace Bug_Tracker.Data
         }
 
         public DbSet<ProjectSettingsModel> ProjectSettings { get; set; }
+        public DbSet<ProjectMembersModel> Project_Members { get; }
     }
 }

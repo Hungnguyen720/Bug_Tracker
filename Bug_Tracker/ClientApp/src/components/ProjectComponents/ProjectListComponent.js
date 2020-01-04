@@ -1,10 +1,23 @@
 ﻿import React, { Component } from 'react';
-import { Checkbox, Table } from 'semantic-ui-react';
-import axios from 'axios';
+import { Table } from 'semantic-ui-react';
 import { ProjectCreateComponent } from './ProjectCreateComponent';
+import authService from '../api-authorization/AuthorizeService';
 
 
 export class ProjectListComponent extends Component {
+    constructor() {
+        super()
+
+        this.state = {
+            projectList: [],
+            User: ''
+        }
+    }
+
+    async componentDidMount() {
+       await this.getLoggedInUser()
+       await this.getProjects(this.state.User)
+    }
 
     state = {
         on: false
@@ -16,7 +29,46 @@ export class ProjectListComponent extends Component {
         })
     }
 
+    async getLoggedInUser() {
+        const user = await Promise.resolve(authService.getUser())
+        this.setState({
+            User: user.name
+        })
+    }
+
+    static renderProjectList(projectList, path) {
+        return (
+            <div>
+                <Table definition>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Project</Table.HeaderCell>
+                            <Table.HeaderCell>%</Table.HeaderCell>
+                            <Table.HeaderCell>Owner</Table.HeaderCell>
+                            <Table.HeaderCell>Tasks</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        { projectList.map(project =>
+                            <Table.Row>
+                                <Table.Cell><a href={path + "/" + project.id}> {project.projectName}</a></Table.Cell>
+                                <Table.Cell>0%</Table.Cell>
+                                <Table.Cell>{ project.owner}</Table.Cell>
+                                <Table.Cell>status</Table.Cell>
+                                <Table.Cell>tasks</Table.Cell>
+                            </Table.Row>
+                            )
+                        }
+                    </Table.Body>
+                </Table>
+            </div>
+        )
+    }
+
     render() {
+
+        let contents = ProjectListComponent.renderProjectList(this.state.projectList, this.props.location.pathname)
+
         return (
             <div>
                 {this.state.on && (
@@ -25,35 +77,12 @@ export class ProjectListComponent extends Component {
                         <button onClick={this.toggle} >Cancel</button>
                         </div>
                 )}
-
-                
-
                 {!this.state.on && (
                     <div>
                     <button onClick={this.toggle} >New Project</button>
 
-                <Table compact celled definition>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell />
-                            <Table.HeaderCell>Project Name</Table.HeaderCell>
-                            <Table.HeaderCell>%</Table.HeaderCell>
-                            <Table.HeaderCell>Owner</Table.HeaderCell>
-                            <Table.HeaderCell>Status</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.Cell collapsing>
-                                <Checkbox slider />
-                            </Table.Cell>
-                            <Table.Cell>John Lilki</Table.Cell>
-                            <Table.Cell>September 14, 2013</Table.Cell>
-                            <Table.Cell>jhlilk22@yahoo.com</Table.Cell>
-                            <Table.Cell>No</Table.Cell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
+                        {contents}
+                
                     </div>
 
                 )}
@@ -61,14 +90,9 @@ export class ProjectListComponent extends Component {
             </div>
         );
     }
-}
-
-function getRequest() {
-    axios.get('api/bugs')
-        .then(function (response) {
-            return response;
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    async getProjects(user) {
+        const response = await fetch('api/ProjectSettingsModels?user=' + user)
+        const data = await response.json()
+        this.setState({ projectList: data })
+    }
 }

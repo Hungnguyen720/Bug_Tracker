@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import DatePicker from '../../../../node_modules/react-datepicker';
 import moment from 'moment';
+import { ProjectDashboard } from '../ProjectDashboard';
+import authService from '../../api-authorization/AuthorizeService';
+
 
 const flagOptions = [
     {
@@ -80,6 +83,7 @@ export class BugsCreateComponent extends Component {
     constructor() {
         super()
         this.state = {
+            ProjectID: '',
             Title: '',
             DueDate: '',
             AssignedTo: '',
@@ -87,7 +91,8 @@ export class BugsCreateComponent extends Component {
             Followers: [],
             Flag: '',
             Severity: '',
-            Description: ''
+            Description: '',
+            Reporter: ''
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -99,11 +104,12 @@ export class BugsCreateComponent extends Component {
     }
 
     handleFormSubmit = () => {
-        const { Title, DueDate, Description, AssignedTo, IssueType, Followers, Flag, Severity } = this.state
+        const { Title, DueDate, Description, AssignedTo, IssueType, Followers, Flag, Severity, ProjectID, Reporter } = this.state
 
         let newDueDate = moment(DueDate).format()
 
         axios.post('api/bugs', {
+            ProjectID,
             Title,
             Description,
             AssignedTo,
@@ -111,7 +117,9 @@ export class BugsCreateComponent extends Component {
             Severity,
             Flag,
             IssueType,
-            Followers
+            Followers,
+            Reporter
+            
         }).then(function (response) {
             console.log(response)
         }).catch(function (response) {
@@ -147,6 +155,20 @@ export class BugsCreateComponent extends Component {
             editorState,
         });
     };
+    
+    componentDidMount() {
+        this.getLoggedInUser()
+            this.setState({
+                ProjectID: parseInt(this.props.projectid),
+            })
+    }
+
+    async getLoggedInUser() {
+        const user = await Promise.resolve(authService.getUser())
+        this.setState({
+            Reporter: user.name
+        })
+    }
 
 
     render() {
