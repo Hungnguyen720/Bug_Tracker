@@ -26,8 +26,17 @@ namespace Bug_Tracker.Controllers
 
     public class OverdueTask
     {
+        public string taskName { get; set; } 
         public string assignedUser { get; set; }
         public double daysOverdue { get; set; }
+    }
+
+    public class TeamTask
+    {
+
+        public string User { get; set; }
+        public int OpenTasks { get; set; }
+        public int OverdueTasks { get; set; }
     }
 
 
@@ -50,6 +59,7 @@ namespace Bug_Tracker.Controllers
             return await _context.Task.Where(s => s.ProjectId == projectId).ToListAsync();
         }
 
+        // GET: api/Tasks/countTask
         [HttpGet("countTask")]
         public async Task<TaskCount> getAllOpenTask(int projectId)
         {
@@ -68,16 +78,35 @@ namespace Bug_Tracker.Controllers
 
         }
 
+        // GET: api/Tasks/overdueTask
         [HttpGet("overdueTask")]
-        public async Task<ActionResult<IEnumerable<OverdueTask>>> getOverdueTasks() {
+        public async Task<ActionResult<IEnumerable<OverdueTask>>> getOverdueTasks(int projectId) {
 
             return await _context.Task.FromSqlRaw("SELECT * FROM Task")
                 .Where(t => t.DateEnd < DateTime.Now)
+                .Where(t => t.ProjectId == projectId)
                 .Select(t => new OverdueTask {
+                    taskName = t.TaskName,
                     assignedUser = t.Owner,
                     daysOverdue = Math.Round((t.DateEnd - DateTime.Now).TotalDays) * -1
                 }).ToListAsync();
 
+        }
+
+        // GET: api/Tasks/teamTask
+        [HttpGet("teamTask")]
+        public async Task<ActionResult<IEnumerable<TeamTask>>> getTeamTasks(int projectid)
+        {
+
+            var data = await _context.Task.FromSqlRaw("SELECT t1.Owner, t1.Id, t2.ProjectId FROM (Select Owner, count(Id) as Id From Task Where status = 'Open' AND ProjectId = {0} Group By Owner) t1 LEFT JOIN (Select Owner, count(Id) as ProjectId From Task Where status = 'Open' AND DateEnd < '1/4/2020' AND ProjectId = {0} Group By Owner) t2 ON(t1.Owner = t2.Owner)", projectid)
+                .Select(t => new TeamTask {
+                    User = t.Owner,
+                    OpenTasks = t.Id,
+                    OverdueTasks = t.ProjectId
+                })
+                .ToListAsync();
+
+            return data;
         }
 
         // GET: api/Tasks/5

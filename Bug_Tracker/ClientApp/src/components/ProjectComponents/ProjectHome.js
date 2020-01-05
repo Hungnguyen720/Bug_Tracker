@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Card, CardDescription } from 'semantic-ui-react';
 import PieChartComponent from '../../components/Charts/PieChartComponent';
+import DoughnutChartComponent  from '../../components/Charts/DonutChartComponent';
 
 export class ProjectHome extends Component {
     constructor() {
@@ -15,15 +16,25 @@ export class ProjectHome extends Component {
             projectOverview: '',
             taskOpenCount: '',
             taskClosedCount: '',
-            chartData: {}
+            bugOpenCount: '',
+            bugClosedCount: '',
+            chartData: {},
+            overdueTasks: [],
+            teamStatus: [],
+            bugStatusData: {}
         }
 
     }
 
     async componentDidMount() {
-        await this.getTasks()
-        await this.getTaskChartData()
-        await this.getProjectDetails(this.props.projectid)
+        const projectid = this.props.projectid
+        await this.getTasks(projectid)
+        await this.getOverdueTasks(projectid)
+        await this.getTaskChartData(projectid)
+        await this.getBugStatus(projectid)
+        await this.getBugStatusChartData(projectid)
+        await this.getProjectDetails(projectid)
+        await this.getTeamStatus(projectid)
     }
 
     getTaskChartData() {
@@ -35,6 +46,28 @@ export class ProjectHome extends Component {
                 ],
                 datasets: [{
                     data: [this.state.taskOpenCount, this.state.taskClosedCount],
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB'
+                    ],
+                    hoverBackgroundColor: [
+                        '#FF6384',
+                        '#36A2EB'
+                    ]
+                }]
+            }
+        })
+    }
+
+    getBugStatusChartData() {
+        this.setState({
+            bugStatusData: {
+                labels: [
+                    'Open Bugs',
+                    'Closed Bugs'
+                ],
+                datasets: [{
+                    data: [this.state.bugOpenCount, this.state.bugClosedCount],
                     backgroundColor: [
                         '#FF6384',
                         '#36A2EB'
@@ -79,6 +112,17 @@ export class ProjectHome extends Component {
                             <Card.Header>
                                 Overdue Work Items
                         </Card.Header>
+                            <table className='table table-striped' aria-labelledby="tabelLabel">
+                                <tbody>
+                                    {this.state.overdueTasks.map(task =>
+                                        <tr>
+                                            <td>{task.taskName}</td>
+                                            <td></td>
+                                            <td>late by {task.daysOverdue} days</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </Card.Content>
                     </Card>
                     <Card>
@@ -86,6 +130,17 @@ export class ProjectHome extends Component {
                             <Card.Header>
                                 Team Status
                         </Card.Header>
+                            <table className='table table-striped' aria-labelledby="tabelLabel">
+                                <tbody>
+                                    {this.state.teamStatus.map(status =>
+                                        <tr>
+                                            <td>{status.user}</td>
+                                            <td>{status.openTasks}</td>
+                                            <td>{status.overdueTasks}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
                         </Card.Content>
                     </Card>
                     <Card>
@@ -93,6 +148,7 @@ export class ProjectHome extends Component {
                             <Card.Header>
                                 Bug Status
                         </Card.Header>
+                            <DoughnutChartComponent data={this.state.bugStatusData} />
                         </Card.Content>
                     </Card>
                 </Card.Group>
@@ -115,8 +171,8 @@ export class ProjectHome extends Component {
         })   
     }
 
-    async getTasks() {
-        const response = await fetch('api/tasks/countTask?projectId=' + 1)
+    async getTasks(projectid) {
+        const response = await fetch('api/tasks/countTask?projectId=' + projectid)
         const data = await response.json()
 
         this.setState({
@@ -126,7 +182,33 @@ export class ProjectHome extends Component {
         })
     }
 
-    async getOverdueTasks() {
+    async getOverdueTasks(projectid) {
+        const response = await fetch('api/tasks/overdueTask?projectId=' + projectid)
+        const data = await response.json()
+
+        this.setState({
+            overdueTasks: data
+        })
+    }
+
+    async getTeamStatus(projectid) {
+        const response = await fetch('api/tasks/teamTask?projectId=' + projectid)
+        const data = await response.json()
+
+        this.setState({
+            teamStatus: data
+        })
+    }
+
+    async getBugStatus(projectid)
+    {
+        const response = await fetch('api/bugs/teamStatus?projectId=' + projectid)
+        const data = await response.json()
+
+        this.setState({
+            bugOpenCount: data.openCount,
+            bugClosedCount: data.closedCount
+        })
 
     }
 }

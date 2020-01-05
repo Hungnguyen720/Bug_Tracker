@@ -12,6 +12,20 @@ using Microsoft.AspNetCore.Identity;
 namespace Bug_Tracker.Controllers
 {
 
+    public class BugStatus 
+    {
+        public BugStatus(int openCount_, int closedCount_, int overdueCount_) 
+        {
+            openCount = openCount_;
+            closedCount = closedCount_;
+            overdueCount = overdueCount_;
+        }
+
+        public int openCount { get; set; }
+        public int closedCount { get; set; }
+        public int overdueCount { get; set; }
+    }
+
 
     [Route("api/[controller]")]
     [ApiController]
@@ -47,9 +61,42 @@ namespace Bug_Tracker.Controllers
             {
                 return NotFound();
             }
-
+            
             return bugs;
         }
+
+        // Get: api/Bugs/TeamStatus
+        [HttpGet("TeamStatus")]
+        public async Task<ActionResult<BugStatus>> GetBugStatus(int projectid)
+        {
+
+            var bugs = await _context.Project_Bugs
+                .Where(b => b.ProjectID == projectid)
+                .Where(b => b.Status == "open")
+                .ToListAsync();
+
+            int openTasks = bugs.Count();
+
+             bugs = await _context.Project_Bugs
+                .Where(b => b.ProjectID == projectid)
+                .Where(b => b.Status == "closed")
+                .ToListAsync();
+
+            int closedTasks = bugs.Count();
+
+            bugs = await _context.Project_Bugs
+                .Where(b => b.ProjectID == projectid)
+                .Where(b => b.DueDate > DateTime.Now)
+                .ToListAsync();
+
+            int overdueTasks = bugs.Count();
+
+            BugStatus status = new BugStatus(openTasks, closedTasks, overdueTasks);
+
+            return status;
+        }
+
+
 
         // PUT: api/Bugs/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
