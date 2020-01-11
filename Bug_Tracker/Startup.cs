@@ -1,16 +1,14 @@
-using Microsoft.AspNetCore.Authentication;
+
+using Bug_Tracker.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
-using Bug_Tracker.Data;
-using Bug_Tracker.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Bug_Tracker
 {
@@ -26,9 +24,6 @@ namespace Bug_Tracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<TaskContext>(options =>
                 options.UseSqlServer(
@@ -50,14 +45,9 @@ namespace Bug_Tracker
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
+            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                      .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+            ;
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -74,6 +64,7 @@ namespace Bug_Tracker
         {
             if (env.IsDevelopment())
             {
+
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
@@ -83,6 +74,8 @@ namespace Bug_Tracker
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -91,8 +84,9 @@ namespace Bug_Tracker
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseIdentityServer();
+                        
             app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

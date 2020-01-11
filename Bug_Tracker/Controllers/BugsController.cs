@@ -32,7 +32,6 @@ namespace Bug_Tracker.Controllers
     public class BugsController : ControllerBase
     {
         private readonly BugContext _context;
-        protected ApplicationDbContext ApplicationDbContext { get; set; }
         protected UserManager<ApplicationUser> UserManager { get; set; }
 
         public BugsController(BugContext context)
@@ -50,7 +49,6 @@ namespace Bug_Tracker.Controllers
         }
 
         // GET: api/Bugs/5
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Bugs>> GetBugs(int id)
         {
