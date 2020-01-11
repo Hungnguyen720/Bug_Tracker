@@ -4,13 +4,6 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
-import { ProjectListComponent } from './components/ProjectComponents/ProjectListComponent';
-import { ProjectDashboard } from './components/ProjectComponents/ProjectDashboard';
-import { BugDetailsComponent } from './components/ProjectComponents/Bugs/BugDetailsComponent';
-
-
-
-
 
 import './custom.css'
 
@@ -22,9 +15,7 @@ export default class App extends Component {
         <Layout>
         <Route exact path='/' component={Home} />
         <Route path='/counter' component={Counter} />
-        <AuthorizeRoute path='/fetch-data' component={FetchData} />
-            <AuthorizeRoute exact path='/:username/projects' component={ProjectListComponent} />
-            <AuthorizeRoute exact path='/:username/projects/:projectid' component={ProjectDashboard} />
+        <Route path='/fetch-data' component={FetchData} />
         </Layout>
     );
   }

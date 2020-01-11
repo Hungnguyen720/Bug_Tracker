@@ -1,14 +1,15 @@
-
 using Bug_Tracker.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Bug_Tracker
 {
@@ -24,6 +25,23 @@ namespace Bug_Tracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            // Sign-in users with the Microsoft identity platform
+            services.AddMicrosoftIdentityPlatformAuthentication(Configuration);
+
+            services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
 
             services.AddDbContext<TaskContext>(options =>
                 options.UseSqlServer(
@@ -45,9 +63,7 @@ namespace Bug_Tracker
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                      .AddAzureAD(options => Configuration.Bind("AzureAd", options));
-            ;
+
 
             services.AddControllersWithViews();
             services.AddRazorPages();
