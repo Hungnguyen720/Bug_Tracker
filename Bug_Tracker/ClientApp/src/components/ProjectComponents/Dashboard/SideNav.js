@@ -14,18 +14,18 @@ export class SideNavComponent extends Component {
                 visible="visible"
                 width='thin'
             >
-                <Menu.Item as='a'>
-                    <Icon name='home' />
+                <Menu.Item id='1' onClick={this.props.onClick}>
+                    <Icon id='1' name='home' />
                     Home
-    </Menu.Item>
-                <Menu.Item as='a'>
-                    <Icon name='gamepad' />
+                </Menu.Item>
+                <Menu.Item id='2' onClick={this.props.onClick}>
+                    <Icon id='2' name='gamepad' />
                     Games
-    </Menu.Item>
-                <Menu.Item as='a'>
-                    <Icon name='camera' />
+                </Menu.Item>
+                <Menu.Item id='3' onClick={this.props.onClick}>
+                    <Icon id='3' name='camera' />
                     Channels
-    </Menu.Item>
+                </Menu.Item>
             </Sidebar>
         )
     }
