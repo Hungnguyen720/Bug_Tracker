@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44321",
+      "applicationUrl": "https://hnguyen.azurewebsites.net",
       "sslPort": 44321
     }
   },

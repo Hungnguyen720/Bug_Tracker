@@ -4,11 +4,6 @@ import axios from 'axios';
 
 
 export class ProjectListComponent extends Component {
-
-
-
-    
-
     render() {
         return (
             <div>

@@ -91,10 +91,10 @@ namespace Bug_Tracker
                 app.UseHsts();
             }
             
-
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
+
             app.UseSpaStaticFiles();
 
             app.UseRouting();
