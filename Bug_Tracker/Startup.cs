@@ -117,6 +117,7 @@ namespace Bug_Tracker
 
                 if (env.IsDevelopment())
                 {
+                    // comment out during production
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
