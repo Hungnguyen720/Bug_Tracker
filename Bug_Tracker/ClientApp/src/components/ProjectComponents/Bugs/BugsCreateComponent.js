@@ -78,7 +78,7 @@ const issueTypeOptions = [
 ]
 
 
-export class BugsCreateComponent extends Component {
+export default class BugsCreateComponent extends Component {
     constructor() {
         super()
         this.state = {

@@ -11,7 +11,7 @@ export class SideNavComponent extends Component {
                 icon='labeled'
                 inverted
                 vertical
-                visible="visible"
+                visible={true}
                 width='thin'
             >
                 <Menu.Item id='1' onClick={this.props.onClick}>
@@ -24,8 +24,9 @@ export class SideNavComponent extends Component {
                 </Menu.Item>
                 <Menu.Item id='3' onClick={this.props.onClick}>
                     <Icon id='3' name='camera' />
-                    Channels
+                    Tasks
                 </Menu.Item>
+
             </Sidebar>
         )
     }

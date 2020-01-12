@@ -4,25 +4,25 @@ import { Checkbox, Table, Button } from 'semantic-ui-react';
 import axios from 'axios';
 
 
-export default class BugsDashboardComponent extends Component {
+export default class TasksListComponent extends Component {
     constructor() {
         super()
-        this.state = { bugsList: [], loading: false }
+        this.state = { taskList: [], loading: false }
     }
 
     componentDidMount() {
         this.populateBugs()
     }
 
-    static renderBugsTable(bugsList, updateContent) {
+    static renderTasksList(bugsList, updateContent) {
         return (
             <div>
-                <Button id="5" basic color='blue' onClick={updateContent}> Submit Bug </Button>
+                <Button id="5" basic color='blue' onClick={updateContent}> Create Task </Button>
                 <Table compact definition>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell />
-                            <Table.HeaderCell>Bug</Table.HeaderCell>
+                            <Table.HeaderCell>Task</Table.HeaderCell>
                             <Table.HeaderCell>Reporter</Table.HeaderCell>
                             <Table.HeaderCell>Created</Table.HeaderCell>
                             <Table.HeaderCell>Status</Table.HeaderCell>
@@ -32,20 +32,6 @@ export default class BugsDashboardComponent extends Component {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {bugsList.map(bug => 
-                            <Table.Row>
-                                <Table.Cell collapsing>
-                                    <Checkbox slider />
-                                </Table.Cell>
-                                <Table.Cell>{bug.title} {bug.id}</Table.Cell>
-                                <Table.Cell>{bug.reporter}</Table.Cell>
-                                <Table.Cell>{bug.dateCreated}</Table.Cell>
-                                <Table.Cell>{bug.status}</Table.Cell>
-                                <Table.Cell>{bug.assignedTo}</Table.Cell>
-                                <Table.Cell>{bug.dueDate}</Table.Cell>
-                                <Table.Cell>{bug.severity}</Table.Cell>
-                            </Table.Row>
-                        )}
                     </Table.Body>
                 </Table>
             </div>
@@ -57,8 +43,8 @@ export default class BugsDashboardComponent extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : BugsDashboardComponent.renderBugsTable(this.state.bugsList, this.props.onClick);
-        if (!this.state.bugsList) {
+            : TasksListComponent.renderTasksList(this.state.taskList, this.props.onClick);
+        if (!this.state.taskList) {
             contents = <h1>bugs list</h1>
         }
 
@@ -71,7 +57,7 @@ export default class BugsDashboardComponent extends Component {
 
 
     async populateBugs() {
-        const response = await fetch('api/bugs')
+        const response = await fetch('api/tasks')
         const data = await response.json()
         console.log(data)
         this.setState({ bugsList: data })
