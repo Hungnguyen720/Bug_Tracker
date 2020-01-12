@@ -16,8 +16,6 @@ C:\Code\Bug_Tracker\Microsoft.Identity.Web\bin\Release\netcoreapp3.0\Microsoft.I
 C:\Code\Bug_Tracker\Microsoft.Identity.Web\bin\Release\netcoreapp3.0\Microsoft.IdentityModel.Tokens.dll
 C:\Code\Bug_Tracker\Microsoft.Identity.Web\bin\Release\netcoreapp3.0\Newtonsoft.Json.dll
 C:\Code\Bug_Tracker\Microsoft.Identity.Web\bin\Release\netcoreapp3.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Code\Bug_Tracker\Microsoft.Identity.Web\bin\Release\netcoreapp3.0\System.Security.Cryptography.Pkcs.dll
-C:\Code\Bug_Tracker\Microsoft.Identity.Web\bin\Release\netcoreapp3.0\runtimes\win\lib\netcoreapp2.1\System.Security.Cryptography.Pkcs.dll
 C:\Code\Bug_Tracker\Microsoft.Identity.Web\obj\Release\netcoreapp3.0\Microsoft.Identity.Web.csprojAssemblyReference.cache
 C:\Code\Bug_Tracker\Microsoft.Identity.Web\obj\Release\netcoreapp3.0\Microsoft.Identity.Web.AssemblyInfoInputs.cache
 C:\Code\Bug_Tracker\Microsoft.Identity.Web\obj\Release\netcoreapp3.0\Microsoft.Identity.Web.AssemblyInfo.cs

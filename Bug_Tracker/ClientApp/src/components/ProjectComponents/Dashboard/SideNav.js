@@ -20,7 +20,7 @@ export class SideNavComponent extends Component {
                 </Menu.Item>
                 <Menu.Item id='2' onClick={this.props.onClick}>
                     <Icon id='2' name='gamepad' />
-                    Games
+                    Bugs
                 </Menu.Item>
                 <Menu.Item id='3' onClick={this.props.onClick}>
                     <Icon id='3' name='camera' />
