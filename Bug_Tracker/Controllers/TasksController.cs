@@ -98,7 +98,7 @@ namespace Bug_Tracker.Controllers
         public async Task<ActionResult<IEnumerable<TeamTask>>> getTeamTasks(int projectid)
         {
 
-            var data = await _context.Task.FromSqlRaw("SELECT t1.Owner, t1.Id, t2.ProjectId FROM (Select Owner, count(Id) as Id From Task Where status = 'Open' AND ProjectId = {0} Group By Owner) t1 LEFT JOIN (Select Owner, count(Id) as ProjectId From Task Where status = 'Open' AND DateEnd < '1/4/2020' AND ProjectId = {0} Group By Owner) t2 ON(t1.Owner = t2.Owner)", projectid)
+            var data = await _context.Task.FromSqlRaw("SELECT t1.Owner, t1.Id, t2.ProjectId FROM (Select Owner, count(Id) as Id From Task Where status = 'Open' AND ProjectId = {0} Group By Owner) t1 LEFT JOIN (Select Owner, count(Id) as ProjectId From Task Where status = 'Open' AND DateEnd < '1/4/2022' AND ProjectId = {0} Group By Owner) t2 ON(t1.Owner = t2.Owner)", projectid)
                 .Select(t => new TeamTask {
                     User = t.Owner,
                     OpenTasks = t.Id,

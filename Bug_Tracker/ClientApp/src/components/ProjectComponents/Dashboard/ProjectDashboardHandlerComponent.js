@@ -5,23 +5,28 @@ import ProjectDashboardHome from './ProjectDashboardHomeComponent';
 import BugsDashboardComponent from '../Bugs/BugsListComponent';
 import BugsCreateComponent from '../Bugs/BugsCreateComponent';
 import TasksList from '../Tasks/TasksListComponent';
-import TasksListComponent from '../Tasks/TasksListComponent';
+import TaskCreateComponent from '../Tasks/TaskCreateComponent';
 
 export class ProjectDashboardComponent extends Component {
 
     constructor() {
         super()
         this.state = {
-            content: ''
+            content: 0,
+            projectId: '',
+            username: ''
         }
         this.updateContentState = this.updateContentState.bind(this)
         this.displayContent = this.displayContent.bind(this)
+        this.setProjectId = this.setProjectId.bind(this)
     }
 
-    componentDidMount() {
-        this.setState({
+     async componentDidMount() {
+        await this.setState({
             content: '1'
         })
+         await this.setProjectId()
+         await this.getLoggedInUser()
     }
 
     updateContentState(e) {
@@ -31,6 +36,14 @@ export class ProjectDashboardComponent extends Component {
         })
     }
 
+    setProjectId() {
+        let url = window.location.href
+        let projectId_ = url[url.length - 1]
+        this.setState({
+            projectId: projectId_
+        })
+    }
+    
     displayContent(contentid) {
         if (contentid == 1) {
             return (
@@ -39,35 +52,44 @@ export class ProjectDashboardComponent extends Component {
         }
         if (contentid == 2) {
             return (
-                <BugsDashboardComponent onClick={this.updateContentState} />
+                <BugsDashboardComponent onClick={this.updateContentState} projectid={this.state.projectId} />
             );
         }
         if (contentid == 3) {
             return (
-                <TasksList />
+                <TasksList onClick={this.updateContentState} projectid={this.state.projectId} />
             );
         }
         if (contentid == 5) {
             return (
-                <BugsCreateComponent />
+                <BugsCreateComponent projectid={this.state.projectId}/>
             );
         }
         if (contentid == 6) {
-
+            return(
+                <TaskCreateComponent />
+            )
         }
-        
     }
+
     render() {
         
         let contents = this.displayContent(this.state.content);
+
         return (
             <div>
-                <SideNavComponent onClick={this.updateContentState} />
                 {contents}
+                <SideNavComponent onClick={this.updateContentState} />
             </div>
         );
     }
 
+    async getLoggedInUser() {
 
-
+        const response = await fetch("user")
+        console.log(response)
+        this.setState({
+            username: response
+        })
+    }
 }

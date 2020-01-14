@@ -78,7 +78,7 @@ const issueTypeOptions = [
 ]
 
 
-export default class BugsCreateComponent extends Component {
+export default class TaskCreateComponent extends Component {
     constructor() {
         super()
         this.state = {
@@ -88,8 +88,7 @@ export default class BugsCreateComponent extends Component {
             IssueType: '',
             Followers: [],
             Flag: '',
-            Severity: '',
-            projectId: this.props.projectid
+            Severity: ''
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -101,7 +100,7 @@ export default class BugsCreateComponent extends Component {
     }
 
     handleFormSubmit = () => {
-        const { Title, DueDate, AssignedTo, IssueType, Followers, Flag, Severity, projectId } = this.state
+        const { Title, DueDate, AssignedTo, IssueType, Followers, Flag, Severity } = this.state
 
         axios.post('api/bugs', {
             Title,
@@ -116,19 +115,22 @@ export default class BugsCreateComponent extends Component {
         }).catch(function (response) {
             console.log(response)
         })
+
     }
 
     handleChange(event) {
         const { name, value } = event.target
+
         this.setState({
             [name]: value
         })
+
     }
 
     handleDropdownChange(event, result) {
         const { name, value } = result
         this.setState({
-            [name] : value
+            [name]: value
         })
     }
 
@@ -195,7 +197,9 @@ export default class BugsCreateComponent extends Component {
                         value={this.state.IssueType}
                         options={issueTypeOptions}
                         onChange={this.handleDropdownChange}
+
                     />
+
                     <Dropdown
                         placeholder="Severity"
                         selection
@@ -203,9 +207,11 @@ export default class BugsCreateComponent extends Component {
                         value={this.state.Severity}
                         options={severityOptions}
                         onChange={this.handleDropdownChange}
+
                     />
                     <button type='submit'>Submit</button>
                     <Button basic color='red' as={Link} to="/test/project/bugs"> Cancel </Button>
+
                 </Form>
             </div>
         )

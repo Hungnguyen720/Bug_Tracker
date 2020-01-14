@@ -4,7 +4,9 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       // change to https://hnguyen.azurewebsites.net/ when publishing
-      "applicationUrl": "https://hnguyen.azurewebsites.net/",
+      // https://localhost:44366 for local
+      // delete application config file
+      "applicationUrl": "https://localhost:44366",
       "sslPort": 44321
     }
   },

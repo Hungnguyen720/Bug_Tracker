@@ -3,7 +3,7 @@ import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { ProjectListComponent } from './components/ProjectComponents/ProjectListComponent';
-import { ProjectDashboardComponent } from './components/ProjectComponents/Dashboard/ProjectDashboardComponent';
+import { ProjectDashboardComponent } from './components/ProjectComponents/Dashboard/ProjectDashboardHandlerComponent';
 import './custom.css'
 
 export default class App extends Component {
@@ -14,7 +14,6 @@ export default class App extends Component {
         <Layout>
             <Route exact path='/projects' component={ProjectListComponent} />
             <Route exact path='/projects/:id' component={ProjectDashboardComponent} />
-
         </Layout>
     );
   }

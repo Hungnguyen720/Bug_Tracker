@@ -32,8 +32,8 @@ export default class BugsDashboardComponent extends Component {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {bugsList.map(bug => 
-                            <Table.Row>
+                        {bugsList.map(bug =>
+                            <Table.Row key={bug.id}>
                                 <Table.Cell collapsing>
                                     <Checkbox slider />
                                 </Table.Cell>
@@ -52,8 +52,6 @@ export default class BugsDashboardComponent extends Component {
         );
     }
 
-
-
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
@@ -69,11 +67,9 @@ export default class BugsDashboardComponent extends Component {
         );
     }
 
-
     async populateBugs() {
-        const response = await fetch('api/bugs')
+        const response = await fetch('api/bugs?projectid=1&user=hung')
         const data = await response.json()
-        console.log(data)
         this.setState({ bugsList: data })
     }
 }

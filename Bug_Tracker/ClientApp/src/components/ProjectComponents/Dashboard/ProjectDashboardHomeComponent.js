@@ -1,50 +1,30 @@
 ﻿import React, { Component } from 'react';
 import { Segment, Grid, Header, Table, Label, GridRow } from 'semantic-ui-react';
+import DoughnutChart from '../../ChartComponents/DougnutChart';
 import { Doughnut, Pie } from 'react-chartjs-2';
 
-const doughnutData = {
-    labels: [
-        'Red',
-        'Green',
-        'Yellow'
-    ],
-    datasets: [{
-        data: [300, 50, 100],
-        backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
-        ],
-        hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
-        ]
-    }]
-};
-
-const pieData = {
-    labels: [
-        'Red',
-        'Blue',
-        'Yellow'
-    ],
-    datasets: [{
-        data: [300, 50, 100],
-        backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
-        ],
-        hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
-        ]
-    }]
-};
 
 export default class ProjectDashboardHome extends Component {
+
+    constructor() {
+        super()
+        this.state = {
+            content: '',
+            projectId: '',
+            taskStatusData: {},
+            bugStatusData: {},
+            teamStatusData: [],
+            overDueWorkItemsData: []
+        }
+
+    }
+
+    componentDidMount() {
+        this.getTaskStatus()
+        this.getBugStatus()
+        this.getTeamStatus()
+        this.getOverdueWorkItems()
+    }
 
     render() {
         return (
@@ -54,13 +34,13 @@ export default class ProjectDashboardHome extends Component {
                         <Grid.Column>
                             <Segment>
                                 <Header as='h1'>Task Status</Header>
-                                <Pie data={pieData}/>
+                                <Pie data={this.state.taskStatusData} />
                             </Segment>
                         </Grid.Column>
                         <Grid.Column>
                             <Segment>
                                 <Header as='h1'>Bug Status</Header>
-                                <Doughnut data={doughnutData} />
+                                <Doughnut data={this.state.bugStatusData} />
                             </Segment>
                             </Grid.Column>
                     </GridRow>
@@ -77,13 +57,19 @@ export default class ProjectDashboardHome extends Component {
                                         </Table.Row>
                                     </Table.Header>
                                     <Table.Body>
-                                        <Table.Row>
-                                            <Table.Cell>
-                                                <Label ribbon>First</Label>
-                                            </Table.Cell>
-                                            <Table.Cell>Cell</Table.Cell>
-                                            <Table.Cell>Cell</Table.Cell>
-                                        </Table.Row>
+                                        {this.state.teamStatusData.map((t, i) =>
+                                            <Table.Row key={i}>
+                                                <Table.Cell>
+                                                    {t.user}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {t.openTasks}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {t.overdueTasks}
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        )}
                                     </Table.Body>
                                 </Table>
                         </Segment>
@@ -100,13 +86,19 @@ export default class ProjectDashboardHome extends Component {
                                     </Table.Row>
                                 </Table.Header>
                                     <Table.Body>
-                                        <Table.Row>
-                                            <Table.Cell>
-                                                <Label ribbon>First</Label>
-                                            </Table.Cell>
-                                            <Table.Cell>Cell</Table.Cell>
-                                            <Table.Cell>Cell</Table.Cell>
-                                        </Table.Row>
+                                        {this.state.overDueWorkItemsData.map((t, i) =>
+                                            <Table.Row key={i}>
+                                                <Table.Cell>
+                                                    {t.assignedUser}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {t.taskName}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {t.daysOverdue}
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        )}
                                     </Table.Body>
                             </Table>
                         </Segment>
@@ -115,5 +107,75 @@ export default class ProjectDashboardHome extends Component {
                 </Grid>
             </div>
         );
+    }
+
+    async getTaskStatus() {
+        const response = await fetch("api/Tasks/countTask?projectid=1")
+        const data = await response.json()
+        this.setState({
+            taskStatusData: {
+                labels: [
+                    'Red',
+                    'Blue'
+                ],
+                datasets: [{
+                    data: [data.openCount, data.closedCount],
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB'
+                    ],
+                    hoverBackgroundColor: [
+                        '#FF6384',
+                        '#36A2EB'
+                    ]
+                }],
+            }
+        })
+    }
+
+
+    async getBugStatus() {
+        
+        const response = await fetch("api/Bugs/TeamStatus?projectid=1")
+        const data = await response.json()
+
+        this.setState({
+            bugStatusData: {
+                labels: [
+                    'Open Tasks',
+                    'Closed Tasks',
+                    'Overdue Count'
+                ],
+                datasets: [{
+                    data: [data.openCount, data.closedCount, data.overdueCount],
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56'
+                    ],
+                    hoverBackgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56'
+                    ]
+                }]
+            }
+        })
+    }
+    async getTeamStatus() {
+        
+        const response = await fetch("api/Tasks/teamTask?projectid=1")
+        const data = await response.json()
+        this.setState({
+            teamStatusData: data
+        })
+    }
+    async getOverdueWorkItems() {
+        
+        const response = await fetch("api/Tasks/overdueTask?projectid=1")
+        const data = await response.json()
+        this.setState({
+            overDueWorkItemsData: data
+        })
     }
 }

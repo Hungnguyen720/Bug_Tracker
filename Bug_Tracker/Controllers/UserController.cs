@@ -6,32 +6,29 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 
-
 namespace Bug_Tracker.Controllers
 {
-    public class TestController : Controller
+    public class UserController : Controller
     {
-        // GET: Test
-        public ActionResult Index()
+        // GET: User
+        public string Index()
         {
-
-            return View();
+            return @User.Identity.Name;
         }
 
-        // GET: Test/Details/5
+        // GET: User/Details/5
         public ActionResult Details(int id)
         {
-
             return View();
         }
 
-        // GET: Test/Create
+        // GET: User/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Test/Create
+        // POST: User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -48,13 +45,13 @@ namespace Bug_Tracker.Controllers
             }
         }
 
-        // GET: Test/Edit/5
+        // GET: User/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Test/Edit/5
+        // POST: User/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -71,13 +68,13 @@ namespace Bug_Tracker.Controllers
             }
         }
 
-        // GET: Test/Delete/5
+        // GET: User/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Test/Delete/5
+        // POST: User/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

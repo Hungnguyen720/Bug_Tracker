@@ -44,7 +44,7 @@ namespace Bug_Tracker.Controllers
         public async Task<ActionResult<IEnumerable<Bugs>>> GetProject_Bugs(int projectid, string user)
         {
 
-            return await _context.Project_Bugs.Where(pid => pid.ProjectID == projectid).Where(u => u.Reporter == user).ToListAsync();
+            return await _context.Project_Bugs.Where(pid => pid.ProjectID == projectid).Where(u => u.Reporter == user || (u.AssignedTo == user)).ToListAsync();
 
         }
 
@@ -84,7 +84,8 @@ namespace Bug_Tracker.Controllers
 
             bugs = await _context.Project_Bugs
                 .Where(b => b.ProjectID == projectid)
-                .Where(b => b.DueDate > DateTime.Now)
+                .Where(b => b.Status == "open")
+                .Where(b => b.DueDate < DateTime.Now)
                 .ToListAsync();
 
             int overdueTasks = bugs.Count();

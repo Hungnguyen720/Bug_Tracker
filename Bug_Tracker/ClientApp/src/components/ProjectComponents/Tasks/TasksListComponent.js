@@ -10,28 +10,38 @@ export default class TasksListComponent extends Component {
         this.state = { taskList: [], loading: false }
     }
 
-    componentDidMount() {
-        this.populateBugs()
+    async componentDidMount() {
+        await this.populateTasks(this.props.projectid)
     }
 
-    static renderTasksList(bugsList, updateContent) {
+    static renderTasksList(taskList, updateContent) {
         return (
             <div>
-                <Button id="5" basic color='blue' onClick={updateContent}> Create Task </Button>
+                <Button id="6" basic color='blue' onClick={updateContent}> Create Task </Button>
                 <Table compact definition>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell />
-                            <Table.HeaderCell>Task</Table.HeaderCell>
-                            <Table.HeaderCell>Reporter</Table.HeaderCell>
-                            <Table.HeaderCell>Created</Table.HeaderCell>
-                            <Table.HeaderCell>Status</Table.HeaderCell>
-                            <Table.HeaderCell>Assigned To</Table.HeaderCell>
-                            <Table.HeaderCell>Due Date</Table.HeaderCell>
-                            <Table.HeaderCell> Severity </Table.HeaderCell>
+                            <Table.HeaderCell> Id </Table.HeaderCell>
+                            <Table.HeaderCell> Task </Table.HeaderCell>
+                            <Table.HeaderCell> Created By </Table.HeaderCell>
+                            <Table.HeaderCell> Start Date </Table.HeaderCell>
+                            <Table.HeaderCell> Due Date </Table.HeaderCell>
+                            <Table.HeaderCell> Priority </Table.HeaderCell>
+                            <Table.HeaderCell> Status </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
+                        {taskList.map(task =>
+                                <tr key={task.id}>
+                                <td>{task.projectId}</td>
+                                <td>{task.taskName}</td>
+                                <td>{task.owner}</td>
+                                <td>{task.dateStart}</td>
+                                <td>{task.dateEnd}</td>
+                                <td>{task.priority}</td>
+                                <td>{task.status}</td>
+                                </tr>
+                            )}
                     </Table.Body>
                 </Table>
             </div>
@@ -44,10 +54,6 @@ export default class TasksListComponent extends Component {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : TasksListComponent.renderTasksList(this.state.taskList, this.props.onClick);
-        if (!this.state.taskList) {
-            contents = <h1>bugs list</h1>
-        }
-
         return (
             <div>
                 {contents}
@@ -56,10 +62,9 @@ export default class TasksListComponent extends Component {
     }
 
 
-    async populateBugs() {
-        const response = await fetch('api/tasks')
+    async populateTasks(projectid) {
+        const response = await fetch('api/Tasks?projectid=' + projectid)
         const data = await response.json()
-        console.log(data)
-        this.setState({ bugsList: data })
+        this.setState({ taskList: data })
     }
 }
