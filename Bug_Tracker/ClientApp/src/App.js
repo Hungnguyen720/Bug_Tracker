@@ -10,11 +10,12 @@ export default class App extends Component {
   static displayName = App.name;
 
   render () {
-    return (
-        <Layout>
-            <Route exact path='/projects' component={ProjectListComponent} />
-            <Route exact path='/projects/:id' component={ProjectDashboardComponent} />
-        </Layout>
+      return (
+        <div>
+                <Route exact path='/' component={Home} />
+                <Route exact path='/projects' component={ProjectListComponent} />
+                <Route exact path='/projects/:id' component={ProjectDashboardComponent} />
+        </div>
     );
   }
 }

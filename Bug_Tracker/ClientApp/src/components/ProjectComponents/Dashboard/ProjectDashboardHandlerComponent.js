@@ -6,6 +6,8 @@ import BugsDashboardComponent from '../Bugs/BugsListComponent';
 import BugsCreateComponent from '../Bugs/BugsCreateComponent';
 import TasksList from '../Tasks/TasksListComponent';
 import TaskCreateComponent from '../Tasks/TaskCreateComponent';
+import { Layout } from '../../Layout';
+
 
 export class ProjectDashboardComponent extends Component {
 
@@ -67,7 +69,7 @@ export class ProjectDashboardComponent extends Component {
         }
         if (contentid == 6) {
             return(
-                <TaskCreateComponent />
+                <TaskCreateComponent projectid={this.state.projectId}/>
             )
         }
     }
@@ -78,8 +80,10 @@ export class ProjectDashboardComponent extends Component {
 
         return (
             <div>
-                {contents}
-                <SideNavComponent onClick={this.updateContentState} />
+                <Layout>
+                    {contents}
+                    <SideNavComponent onClick={this.updateContentState} />
+                </Layout>
             </div>
         );
     }

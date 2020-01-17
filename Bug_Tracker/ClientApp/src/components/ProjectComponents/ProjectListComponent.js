@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Checkbox, Table } from 'semantic-ui-react';
+import { Layout } from '../Layout';
 import axios from 'axios';
 
 
@@ -7,6 +8,7 @@ export class ProjectListComponent extends Component {
     render() {
         return (
             <div>
+                <Layout>
             <button>New Project</button>
             <Table compact celled definition>
                 <Table.Header>
@@ -29,7 +31,8 @@ export class ProjectListComponent extends Component {
                         <Table.Cell>No</Table.Cell>
                     </Table.Row>
                 </Table.Body>
-                </Table>
+                    </Table>
+                </Layout>
                 </div>
         );
     }

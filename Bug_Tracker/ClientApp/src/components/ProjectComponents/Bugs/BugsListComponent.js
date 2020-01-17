@@ -18,10 +18,9 @@ export default class BugsDashboardComponent extends Component {
         return (
             <div>
                 <Button id="5" basic color='blue' onClick={updateContent}> Submit Bug </Button>
-                <Table compact definition>
+                <Table compact>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell />
                             <Table.HeaderCell>Bug</Table.HeaderCell>
                             <Table.HeaderCell>Reporter</Table.HeaderCell>
                             <Table.HeaderCell>Created</Table.HeaderCell>
@@ -34,9 +33,6 @@ export default class BugsDashboardComponent extends Component {
                     <Table.Body>
                         {bugsList.map(bug =>
                             <Table.Row key={bug.id}>
-                                <Table.Cell collapsing>
-                                    <Checkbox slider />
-                                </Table.Cell>
                                 <Table.Cell>{bug.title} {bug.id}</Table.Cell>
                                 <Table.Cell>{bug.reporter}</Table.Cell>
                                 <Table.Cell>{bug.dateCreated}</Table.Cell>

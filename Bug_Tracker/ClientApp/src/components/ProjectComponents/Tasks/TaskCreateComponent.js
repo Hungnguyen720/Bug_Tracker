@@ -8,16 +8,21 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const flagOptions = [
+const priorityOptions = [
     {
-        key: "Internal",
-        text: "Internal",
-        value: "Internal",
+        key: "Low",
+        text: "Low",
+        value: "Low",
     },
     {
-        key: "External",
-        text: "External",
-        value: "External",
+        key: "Medium",
+        text: "Medium",
+        value: "Medium",
+    },
+    {
+        key: "High",
+        text: "High",
+        value: "High",
     }
 ]
 
@@ -88,7 +93,8 @@ export default class TaskCreateComponent extends Component {
             IssueType: '',
             Followers: [],
             Flag: '',
-            Severity: ''
+            Severity: '',
+            projectId: ''
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -100,9 +106,10 @@ export default class TaskCreateComponent extends Component {
     }
 
     handleFormSubmit = () => {
-        const { Title, DueDate, AssignedTo, IssueType, Followers, Flag, Severity } = this.state
+        const { Title, DueDate, AssignedTo, IssueType, Followers, Flag, Severity, projectId } = this.state
 
-        axios.post('api/bugs', {
+        axios.post('api/tasks', {
+            projectId,
             Title,
             AssignedTo,
             DueDate,
@@ -115,7 +122,12 @@ export default class TaskCreateComponent extends Component {
         }).catch(function (response) {
             console.log(response)
         })
+    }
 
+    componentDidMount() {
+        this.setState({
+            projectId: parseInt(this.props.projectid)
+        })
     }
 
     handleChange(event) {
@@ -152,10 +164,10 @@ export default class TaskCreateComponent extends Component {
 
         return (
             <div>
-                <h1>Create Bug</h1>
+                <h1>Create Task</h1>
                 <Form onSubmit={this.handleFormSubmit}>
                     <Form.Field>
-                        <label>Bug Name</label>
+                        <label>Task Name</label>
                         <input
                             name='Title'
                             value={this.state.Title}
@@ -183,31 +195,12 @@ export default class TaskCreateComponent extends Component {
                         onEditorStateChange={this.onEditorStateChange}
                     />
                     <Dropdown
-                        placeholder="Flag"
+                        placeholder="Priority"
                         name="Flag"
                         value={this.state.Flag}
                         selection
-                        options={flagOptions}
+                        options={priorityOptions}
                         onChange={this.handleDropdownChange}
-                    />
-                    <Dropdown
-                        placeholder="Issue Type"
-                        selection
-                        name="IssueType"
-                        value={this.state.IssueType}
-                        options={issueTypeOptions}
-                        onChange={this.handleDropdownChange}
-
-                    />
-
-                    <Dropdown
-                        placeholder="Severity"
-                        selection
-                        name="Severity"
-                        value={this.state.Severity}
-                        options={severityOptions}
-                        onChange={this.handleDropdownChange}
-
                     />
                     <button type='submit'>Submit</button>
                     <Button basic color='red' as={Link} to="/test/project/bugs"> Cancel </Button>

@@ -1,26 +1,56 @@
 import React, { Component } from 'react';
+import logo from '../landing_page_6.jpg';
+import {Button} from 'semantic-ui-react';
+
 
 export class Home extends Component {
   static displayName = Home.name;
 
-  render () {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
+    render() {
+        return (
+            <div style={{
+                display: 'flex',
+                width: '100vw',
+                height: '100vh',
+                backgroundImage: `url(${logo})`,
+                overflow: 'hidden',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat'
+
+    }}>
+                <div style={{
+                    width: '100%'
+                }}>
+                    <div style={{
+                        marginLeft: 'auto',
+                        width: '550px',
+                        height: '100%',
+                        textAlign: 'left',
+                    }}>
+                        <div style={{
+                            padding: '10% 5%',
+                            position: 'absolute',
+                            color: 'white'
+                            
+                        }}>
+                            <h3>Hello!
+                        <br />Thank you for visiting my App Demo
+                        <br />To go through the demo please follow these steps:</h3>
+                    <ol>
+                        <li>Press the login button below</li>
+                        <li>Sign in using: Hnguyen720test@gmail.com</li>
+                        <li>Use the password: CodeisCool123</li>
+                            </ol>
+                            <div style={{
+                                width: '100%',
+                                textAlign: 'center'
+                            }}>
+                                <a href="home" ><button class="ui primary button">Login</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
     );
   }
 }

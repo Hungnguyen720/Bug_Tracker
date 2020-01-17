@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Bug_Tracker
 {
@@ -33,7 +35,10 @@ namespace Bug_Tracker
             });
 
             // Sign-in users with the Microsoft identity platform
-            services.AddMicrosoftIdentityPlatformAuthentication(Configuration);
+
+            // Configuration to sign-in users with Azure AD B2C
+            services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme)
+                .AddAzureADB2C(options => Configuration.Bind("AzureAdB2C", options));
 
             services.AddControllersWithViews(options =>
             {
@@ -42,6 +47,10 @@ namespace Bug_Tracker
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
+
+            //Configuring appsettings section AzureADB2C, into IOptions
+            services.AddOptions();
+            services.Configure<AzureADB2COptions>(Configuration.GetSection("AzureAdB2C"));
 
             services.AddDbContext<TaskContext>(options =>
                 options.UseSqlServer(

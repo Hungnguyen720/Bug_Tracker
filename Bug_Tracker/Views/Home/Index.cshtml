@@ -1,0 +1,43 @@
+﻿@model List<Bug_Tracker.Models.ProjectSettingsModel>;
+
+@{
+    ViewData["Title"] = "Projects";
+}
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to the Project Lists!</h1>
+        <p class="lead">Sample Data has been pre-loaded to this specific account</p>
+        <hr class="my-4">
+        <p>This app is using Asp.net MVC to get data from the SQL Database and is returning the data to the view. <br>
+            The website and SQL server is being hosted an Microsoft Azure. That is why a login is required.<br>
+            Please click on any link under the project id column to access the project's dashboard.
+        </p>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ProjectId</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Project Name</th>
+                <th scope="col">Project Overview</th>
+                <th scope="col">Date End</th>
+                <th scope="col">Date Start</th>
+
+            </tr>
+        </thead>
+        <tbody>
+@foreach (var item in Model)
+{
+            <tr>
+                <th scope="row">1</th>
+                <td><a href="projects/@item.ProjectId"> @item.ProjectId</a></td>
+                <td>@item.Owner</td>
+                <td>@item.ProjectName</td>
+                <td>@item.ProjectOverview</td>
+                <td>@item.DateEnd</td>
+                <td>@item.DateStart</td>
+            </tr>
+}
+        </tbody>
+    </table>

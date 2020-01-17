@@ -89,7 +89,7 @@ export default class BugsCreateComponent extends Component {
             Followers: [],
             Flag: '',
             Severity: '',
-            projectId: this.props.projectid
+            projectId: ''
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -104,6 +104,7 @@ export default class BugsCreateComponent extends Component {
         const { Title, DueDate, AssignedTo, IssueType, Followers, Flag, Severity, projectId } = this.state
 
         axios.post('api/bugs', {
+            projectId,
             Title,
             AssignedTo,
             DueDate,
@@ -123,7 +124,15 @@ export default class BugsCreateComponent extends Component {
         this.setState({
             [name]: value
         })
+    } 
+
+    componentDidMount() {
+        this.setState({
+            projectId: parseInt(this.props.projectid)
+        })
     }
+
+
 
     handleDropdownChange(event, result) {
         const { name, value } = result

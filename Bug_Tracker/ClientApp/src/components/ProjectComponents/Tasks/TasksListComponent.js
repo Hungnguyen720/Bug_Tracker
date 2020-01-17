@@ -18,7 +18,7 @@ export default class TasksListComponent extends Component {
         return (
             <div>
                 <Button id="6" basic color='blue' onClick={updateContent}> Create Task </Button>
-                <Table compact definition>
+                <Table compact>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell> Id </Table.HeaderCell>

@@ -161,6 +161,9 @@ namespace Bug_Tracker.Controllers
         [HttpPost]
         public async Task<ActionResult<Task>> PostTask(Task task)
         {
+            int maxId = _context.Task.Max(t => t.Id);
+            task.Id = maxId;
+
             _context.Task.Add(task);
             await _context.SaveChangesAsync();
 
