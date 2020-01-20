@@ -23,19 +23,19 @@ export class Home extends Component {
                 }}>
                     <div style={{
                         marginLeft: 'auto',
-                        width: '550px',
+                        width: '600px',
                         height: '100%',
                         textAlign: 'left',
                     }}>
                         <div style={{
-                            padding: '10% 5%',
+                            padding: '10% 1%',
                             position: 'absolute',
                             color: 'white'
                             
                         }}>
-                            <h3>Hello!
+                            <h1>Hello!
                         <br />Thank you for visiting my App Demo
-                        <br />To go through the demo please follow these steps:</h3>
+                        <br />To go through the demo please follow these steps:</h1>
                     <ol>
                         <li>Press the login button below</li>
                         <li>Sign in using: Hnguyen720test@gmail.com</li>

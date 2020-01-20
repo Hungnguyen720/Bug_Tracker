@@ -1,12 +1,10 @@
 ﻿import React, { Component } from 'react';
-import { Form, Dropdown, Button } from 'semantic-ui-react';
+import { Form, Dropdown, Button, TextArea, Container } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { EditorState } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 
 const flagOptions = [
     {
@@ -155,20 +153,19 @@ export default class BugsCreateComponent extends Component {
 
 
     render() {
-        const { editorState } = this.state;
 
         return (
             <div>
-                <h1>Create Bug</h1>
-                <Form onSubmit={this.handleFormSubmit}>
-                    <Form.Field>
-                        <label>Bug Name</label>
-                        <input
-                            name='Title'
-                            value={this.state.Title}
-                            onChange={this.handleChange}
-                        />
-                    </Form.Field>
+                <h1>Submit Bug</h1>
+                    <Form onSubmit={this.handleFormSubmit}>
+                        <Form.Field>
+                            <label>Bug Name</label>
+                                <input
+                                    name='Title'
+                                    value={this.state.Title}
+                                    onChange={this.handleChange}
+                                />
+                        </Form.Field>
                     <Form.Field>
                         <label>Assigned To</label>
                         <input
@@ -177,18 +174,17 @@ export default class BugsCreateComponent extends Component {
                             onChange={this.handleChange}
                         />
                     </Form.Field>
+
                     <DatePicker
                         selected={this.state.DueDate}
                         onChange={this.handleDueDateChange}
                         name="dueDate"
                         placeholderText="Due Date"
-                    />
-                    <Editor
-                        editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        onEditorStateChange={this.onEditorStateChange}
-                    />
+                    />{" "}
+
+                    <TextArea
+                        placeholder='Describe the Bug'
+                    />{" "}
                     <Dropdown
                         placeholder="Flag"
                         name="Flag"
@@ -196,7 +192,7 @@ export default class BugsCreateComponent extends Component {
                         selection
                         options={flagOptions}
                         onChange={this.handleDropdownChange}
-                    />
+                    />{' '}
                     <Dropdown
                         placeholder="Issue Type"
                         selection
@@ -204,7 +200,7 @@ export default class BugsCreateComponent extends Component {
                         value={this.state.IssueType}
                         options={issueTypeOptions}
                         onChange={this.handleDropdownChange}
-                    />
+                    />{' '}
                     <Dropdown
                         placeholder="Severity"
                         selection
@@ -212,10 +208,10 @@ export default class BugsCreateComponent extends Component {
                         value={this.state.Severity}
                         options={severityOptions}
                         onChange={this.handleDropdownChange}
-                    />
-                    <button type='submit'>Submit</button>
+                    />{' '}
+                    <Button color='green' type='submit'>Submit</Button>
                     <Button basic color='red' as={Link} to="/test/project/bugs"> Cancel </Button>
-                </Form>
+                    </Form>
             </div>
         )
     }
